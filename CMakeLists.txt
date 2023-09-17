@@ -11,17 +11,17 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Creates a pico-sdk subdirectory in our project for the libraries
 pico_sdk_init()
+add_subdirectory(driver)
 # point out the CMake, where to find the executable source file
 add_executable(${PROJECT_NAME}
         example.cpp
-        LCD_I2C.cpp
 )
 # create map/bin/hex/uf2 files.
 pico_add_extra_outputs(${PROJECT_NAME})
 
 # Pull in our pico_stdlib which pulls in commonly used features (gpio, timer-delay etc)
 target_link_libraries(${PROJECT_NAME}
-        pico_stdlib hardware_i2c
+        pico_stdlib LCD_I2C
 )
 
 pico_enable_stdio_usb(${PROJECT_NAME} 1)

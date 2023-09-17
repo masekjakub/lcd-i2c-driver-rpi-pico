@@ -29,17 +29,17 @@ void LCD_I2C::init(i2c_inst_t *i2c_number, int addr, const int baudrate)
     busy_wait_ms(300);
 
     // init sequence from datasheet
-    LCD_I2C::sendbyte(0x03, TYPE_COMMAND);
+    LCD_I2C::sendByte(0x03, TYPE_COMMAND);
     sleep_ms(5);
-    LCD_I2C::sendbyte(0x03, TYPE_COMMAND);
-    LCD_I2C::sendbyte(0x03, TYPE_COMMAND);
-    LCD_I2C::sendbyte(0x02, TYPE_COMMAND); // 4-bit mode
+    LCD_I2C::sendByte(0x03, TYPE_COMMAND);
+    LCD_I2C::sendByte(0x03, TYPE_COMMAND);
+    LCD_I2C::sendByte(0x02, TYPE_COMMAND); // 4-bit mode
 
-    LCD_I2C::sendbyte(CMD_FUNCTIONSET | CMD_FS_2LINE | CMD_FS_5x8DOTS, TYPE_COMMAND); // 16x2 display
-    LCD_I2C::sendbyte(CMD_DISPLAYCONTROL | CMD_DC_DISPLAYON | CMD_DC_CURSOROFF | CMD_DC_BLINKOFF , TYPE_COMMAND); // display control, display on/off, cursor on/off, blink on/off
-    LCD_I2C::sendbyte(CMD_CLEARDISPLAY, TYPE_COMMAND); // clear display
+    LCD_I2C::sendByte(CMD_FUNCTIONSET | CMD_FS_2LINE | CMD_FS_5x8DOTS, TYPE_COMMAND); // 16x2 display
+    LCD_I2C::sendByte(CMD_DISPLAYCONTROL | CMD_DC_DISPLAYON | CMD_DC_CURSOROFF | CMD_DC_BLINKOFF , TYPE_COMMAND); // display control, display on/off, cursor on/off, blink on/off
+    LCD_I2C::sendByte(CMD_CLEARDISPLAY, TYPE_COMMAND); // clear display
     sleep_ms(5);
-    LCD_I2C::sendbyte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND); // entry mode set, entry left/right, entry shift increment/decrement
+    LCD_I2C::sendByte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND); // entry mode set, entry left/right, entry shift increment/decrement
 }
 
 /**
@@ -48,10 +48,10 @@ void LCD_I2C::init(i2c_inst_t *i2c_number, int addr, const int baudrate)
  * @param line Line number
  * @param row Row number
  */
-void LCD_I2C::setcursor(uint8_t line, uint8_t row)
+void LCD_I2C::setCursor(uint8_t line, uint8_t row)
 {
     uint8_t linesOffsets[4] = {0x00,0x40,0x14,0x54};
-    LCD_I2C::sendbyte(DDRAM_LINE1 | (linesOffsets[line] + row), TYPE_COMMAND);
+    LCD_I2C::sendByte(DDRAM_LINE1 | (linesOffsets[line] + row), TYPE_COMMAND);
 }
 
 /**
@@ -60,7 +60,7 @@ void LCD_I2C::setcursor(uint8_t line, uint8_t row)
  */
 void LCD_I2C::clear(void)
 {
-    LCD_I2C::sendbyte(CMD_CLEARDISPLAY, TYPE_COMMAND);
+    LCD_I2C::sendByte(CMD_CLEARDISPLAY, TYPE_COMMAND);
     busy_wait_ms(3);
 }
 
@@ -72,7 +72,7 @@ void LCD_I2C::clear(void)
 void LCD_I2C::write(const char* s)
 {
     string str(s);
-    LCD_I2C::write_string(str);
+    LCD_I2C::writeString(str);
 }
 
 /**
@@ -82,7 +82,7 @@ void LCD_I2C::write(const char* s)
  */
 void LCD_I2C::write(string s)
 {
-    LCD_I2C::write_string(s);
+    LCD_I2C::writeString(s);
 }
 
 /**
@@ -92,7 +92,7 @@ void LCD_I2C::write(string s)
  */
 void LCD_I2C::write(int location)
 {
-    LCD_I2C::writechar(location);
+    LCD_I2C::writeChar(location);
 }
 
 /**
@@ -103,7 +103,7 @@ void LCD_I2C::write(int location)
 void LCD_I2C::backlight(bool state)
 {
     this->backlight_state = state ? CMD_BACKLIGHT : CMD_NOBACKLIGHT;
-    LCD_I2C::sendbyte(CMD_NOOP, TYPE_COMMAND);
+    LCD_I2C::sendByte(CMD_NOOP, TYPE_COMMAND);
 }
 
 /**
@@ -111,7 +111,7 @@ void LCD_I2C::backlight(bool state)
  * 
  */
 void LCD_I2C::scrollLeft(void) {
-	LCD_I2C::sendbyte(CMD_CURSORSHIFT | CMD_CS_DISPLAYMOVE | CMD_CS_MOVELEFT, TYPE_COMMAND);
+	LCD_I2C::sendByte(CMD_CURSORSHIFT | CMD_CS_DISPLAYMOVE | CMD_CS_MOVELEFT, TYPE_COMMAND);
 }
 
 /**
@@ -119,7 +119,7 @@ void LCD_I2C::scrollLeft(void) {
  * 
  */
 void LCD_I2C::scrollRight(void) {
-	LCD_I2C::sendbyte(CMD_CURSORSHIFT | CMD_CS_DISPLAYMOVE | CMD_CS_MOVERIGHT, TYPE_COMMAND);
+	LCD_I2C::sendByte(CMD_CURSORSHIFT | CMD_CS_DISPLAYMOVE | CMD_CS_MOVERIGHT, TYPE_COMMAND);
 }
 
 /**
@@ -128,7 +128,7 @@ void LCD_I2C::scrollRight(void) {
  */
 void LCD_I2C::entryLeft(void) {
     this->entry_mode |= CMD_EM_ENTRYLEFT;
-    LCD_I2C::sendbyte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND);
+    LCD_I2C::sendByte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND);
 }
 
 /**
@@ -137,7 +137,7 @@ void LCD_I2C::entryLeft(void) {
  */
 void LCD_I2C::entryRight(void) {
     this->entry_mode &= ~CMD_EM_ENTRYLEFT;
-    LCD_I2C::sendbyte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND);
+    LCD_I2C::sendByte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND);
 }
 
 /**
@@ -146,7 +146,7 @@ void LCD_I2C::entryRight(void) {
  */
 void LCD_I2C::autoScroll(void) {
     this->entry_mode |= CMD_EM_ENTRYSHIFTINCREMENT;
-    LCD_I2C::sendbyte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND);
+    LCD_I2C::sendByte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND);
 }
 
 /**
@@ -155,7 +155,7 @@ void LCD_I2C::autoScroll(void) {
  */
 void LCD_I2C::noAutoScroll(void) {
     this->entry_mode &= ~CMD_EM_ENTRYSHIFTINCREMENT;
-    LCD_I2C::sendbyte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND);
+    LCD_I2C::sendByte(CMD_ENTRYMODESET | this->entry_mode, TYPE_COMMAND);
 }
 
 /**
@@ -171,9 +171,9 @@ void LCD_I2C::createChar(uint8_t location, uint8_t charMap[]) {
     }
 
     uint8_t charAddr[8] = {0x40, 0x48, 0x50, 0x58, 0x60, 0x68, 0x70, 0x78};
-    LCD_I2C::sendbyte(charAddr[location], TYPE_COMMAND);
+    LCD_I2C::sendByte(charAddr[location], TYPE_COMMAND);
     for (int i = 0; i < 8; i++) {
-        LCD_I2C::sendbyte(charMap[i], TYPE_CHARACTER);
+        LCD_I2C::sendByte(charMap[i], TYPE_CHARACTER);
     }
 }
 
@@ -186,7 +186,7 @@ void LCD_I2C::createChar(uint8_t location, uint8_t charMap[]) {
  *
  * @param value Byte to write
  */
-void LCD_I2C::i2c_writebyte(uint8_t value)
+void LCD_I2C::i2cWriteByte(uint8_t value)
 {
     i2c_write_blocking(i2cNumber, i2c_addr, &value, 1, false);
 }
@@ -196,11 +196,11 @@ void LCD_I2C::i2c_writebyte(uint8_t value)
  *
  * @param val Value to toggle
  */
-void LCD_I2C::toggleenable(uint8_t val)
+void LCD_I2C::toggleEnable(uint8_t val)
 {
-    LCD_I2C::i2c_writebyte(val | CMD_ENABLE);
+    LCD_I2C::i2cWriteByte(val | CMD_ENABLE);
     busy_wait_us(5);
-    LCD_I2C::i2c_writebyte(val & ~CMD_ENABLE);
+    LCD_I2C::i2cWriteByte(val & ~CMD_ENABLE);
     busy_wait_us(80);
 }
 
@@ -210,15 +210,15 @@ void LCD_I2C::toggleenable(uint8_t val)
  * @param val Value to send
  * @param mode Character or command
  */
-void LCD_I2C::sendbyte(uint8_t val, uint8_t mode)
+void LCD_I2C::sendByte(uint8_t val, uint8_t mode)
 {
     uint8_t high_nibble = mode | (val & 0xF0) | this->backlight_state;
     uint8_t low_nibble = mode | ((val << 4) & 0xF0) | this->backlight_state;
 
-    LCD_I2C::i2c_writebyte(high_nibble);
-    LCD_I2C::toggleenable(high_nibble);
-    LCD_I2C::i2c_writebyte(low_nibble);
-    LCD_I2C::toggleenable(low_nibble);
+    LCD_I2C::i2cWriteByte(high_nibble);
+    LCD_I2C::toggleEnable(high_nibble);
+    LCD_I2C::i2cWriteByte(low_nibble);
+    LCD_I2C::toggleEnable(low_nibble);
 }
 
 /**
@@ -226,9 +226,9 @@ void LCD_I2C::sendbyte(uint8_t val, uint8_t mode)
  *
  * @param ch Character to write
  */
-void LCD_I2C::writechar(const char ch)
+void LCD_I2C::writeChar(const char ch)
 {
-    LCD_I2C::sendbyte(ch, TYPE_CHARACTER);
+    LCD_I2C::sendByte(ch, TYPE_CHARACTER);
 }
 
 /**
@@ -236,11 +236,11 @@ void LCD_I2C::writechar(const char ch)
  *
  * @param s String to write
  */
-void LCD_I2C::write_string(string s)
+void LCD_I2C::writeString(string s)
 {
     for (int i = 0; i < s.length(); i++)
     {
-        LCD_I2C::writechar(s[i]);
+        LCD_I2C::writeChar(s[i]);
     }
 }
 /*----------------------[END Private functions]-----------------------*/

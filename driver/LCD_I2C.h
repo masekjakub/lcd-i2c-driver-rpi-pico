@@ -17,7 +17,6 @@
 #define TYPE_CHARACTER 1
 /*-------------------------[END lcd byte types]-------------------------*/
 
-
 /*----------------------------[lcd commands]----------------------------*/
 #define CMD_NOOP 0x00
 #define CMD_CLEARDISPLAY 0x01
@@ -26,7 +25,6 @@
 #define CMD_BACKLIGHT 0x08
 #define CMD_NOBACKLIGHT 0x00
 /*--------------------------[END lcd commands]--------------------------*/
-
 
 /*--------------------------[display control]---------------------------*/
 #define CMD_DISPLAYCONTROL 0x08
@@ -38,7 +36,6 @@
 #define CMD_DC_BLINKOFF 0x00
 /*------------------------[END display control]-------------------------*/
 
-
 /*-------------------------[lcd function set]---------------------------*/
 #define CMD_FUNCTIONSET 0x20
 #define CMD_FS_1LINE 0x00
@@ -46,7 +43,6 @@
 #define CMD_FS_5x8DOTS 0x00
 #define CMD_FS_5x10DOTS 0x04
 /*--------------------------[END function set]--------------------------*/
-
 
 /*---------------------------[lcd entry mode]---------------------------*/
 #define CMD_ENTRYMODESET 0x04
@@ -56,12 +52,13 @@
 #define CMD_EM_ENTRYSHIFTDECREMENT 0x00
 /*---------------------------[END entry mode]---------------------------*/
 
-
+/*---------------------------[lcd cursor shift]-------------------------*/
 #define CMD_CURSORSHIFT 0x10
 #define CMD_CS_DISPLAYMOVE 0x08
 #define CMD_CS_CURSORMOVE 0x00
 #define CMD_CS_MOVERIGHT 0x04
 #define CMD_CS_MOVELEFT 0x00
+/*-------------------------[END cursor shift]---------------------------*/
 
 /*---------------------------[lcd adrresses]----------------------------*/
 #define DDRAM_LINE1 0x80
@@ -81,7 +78,7 @@ public:
     void write(const char*);
     void write(string);
     void write(int);
-    void setcursor(uint8_t, uint8_t);
+    void setCursor(uint8_t, uint8_t);
     void backlight(bool);
     void scrollLeft();
     void scrollRight();
@@ -96,11 +93,11 @@ private:
     i2c_inst_t *i2cNumber;
     int backlight_state = CMD_BACKLIGHT;
     int entry_mode = CMD_EM_ENTRYLEFT | CMD_EM_ENTRYSHIFTDECREMENT;
-    void i2c_writebyte(uint8_t);
-    void toggleenable(uint8_t);
-    void sendbyte(uint8_t, uint8_t);
-    void writechar(const char);
-    void write_string(string);
+    void i2cWriteByte(uint8_t);
+    void toggleEnable(uint8_t);
+    void sendByte(uint8_t, uint8_t);
+    void writeChar(const char);
+    void writeString(string);
 };
 
 #endif

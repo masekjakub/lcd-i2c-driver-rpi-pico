@@ -17,15 +17,15 @@ using namespace std;
 void testWrite(LCD_I2C lcd)
 {
     lcd.clear();
-    lcd.setcursor(0, 5);
+    lcd.setCursor(0, 5);
     lcd.write("Hello");
-    lcd.setcursor(1, 2);
+    lcd.setCursor(1, 2);
     lcd.write("Second line");
 
     sleep_ms(4000);
 
     lcd.clear();
-    lcd.setcursor(0, 15);
+    lcd.setCursor(0, 15);
     lcd.entryRight();
     lcd.write("backwards");
     lcd.write(" lamron");
@@ -42,7 +42,7 @@ void testBlinking(LCD_I2C lcd)
     {
         lcd.backlight(false);
         sleep_ms(500);
-        lcd.setcursor(0, 10);
+        lcd.setCursor(0, 10);
         lcd.write(to_string(i));
         lcd.backlight(true);
         sleep_ms(500);
@@ -70,7 +70,7 @@ void testScroll(LCD_I2C lcd)
 void testCustomChars(LCD_I2C lcd)
 {
     lcd.clear();
-    lcd.setcursor(0, 2);
+    lcd.setCursor(0, 2);
     lcd.write("Custom chars");
     uint8_t cc1[] = {0x00, 0x00, 0x0A, 0x00, 0x11, 0x0E, 0x00, 0x00}; // smiley
     uint8_t cc2[] = {0x1F, 0x10, 0x1F, 0x01, 0x1F, 0x10, 0x1F, 0x01}; // snake
@@ -79,7 +79,7 @@ void testCustomChars(LCD_I2C lcd)
     lcd.createChar(1, cc2);
     lcd.createChar(2, cc3);
 
-    lcd.setcursor(1, 6);
+    lcd.setCursor(1, 6);
     lcd.write(0);
     lcd.write(1);
     lcd.write(2);
@@ -95,7 +95,7 @@ void writeEndSpeech(LCD_I2C lcd)
     while (1)
     {
         lcd.clear();
-        lcd.setcursor(0, 16);
+        lcd.setCursor(0, 16);
         for (int i = 0; i < s.length(); i++)
         {
             // ensure that the text will not flow out of the proper line
@@ -103,10 +103,10 @@ void writeEndSpeech(LCD_I2C lcd)
             {
                 lcd.noAutoScroll();
                 lcd.clear();
-                lcd.setcursor(0, 0);
+                lcd.setCursor(0, 0);
                 lcd.write(s.substr(i - 16, 16));
                 lcd.autoScroll();
-                lcd.setcursor(0, 16);
+                lcd.setCursor(0, 16);
             }
             lcd.write(s[i]);
             sleep_ms(300);
